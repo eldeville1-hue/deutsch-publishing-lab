@@ -1,6 +1,7 @@
 """Exercise the published textbook in Chromium, including mobile emulation."""
 import os
 import re
+import shutil
 
 from playwright.sync_api import expect, sync_playwright
 
@@ -107,6 +108,7 @@ def test_viewport(browser, width, height, mobile):
         expect(page.locator("#open-study-top")).to_be_focused()
         page.reload()
         expect(library).to_be_visible()
+        expect(library).to_have_css("background-color", "rgb(24, 35, 29)")
         page.locator("#library-continue").click()
         expect(page.locator("#quick-chapter")).to_have_value("schule")
         expect(page.locator("#write-schule")).to_have_value("Das ist mein überarbeiteter Entwurf.")
@@ -131,7 +133,7 @@ def test_viewport(browser, width, height, mobile):
 
 
 with sync_playwright() as playwright:
-    browser = playwright.chromium.launch()
+    browser = playwright.chromium.launch(executable_path=shutil.which("google-chrome"))
     for width, height, mobile in [(320, 700, True), (375, 812, True), (390, 844, True),
                                   (430, 932, True), (768, 1024, True), (1440, 900, False)]:
         test_viewport(browser, width, height, mobile)
