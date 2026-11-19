@@ -198,6 +198,20 @@ def test_viewport(browser, width, height, mobile):
         expect(page.locator(".final-dialog")).to_be_visible()
         page.keyboard.press("Escape")
         expect(page.locator(".final-dialog")).to_be_hidden()
+
+        # Restore a saved progress file through the actual import control.
+        page.select_option("#quick-chapter", "schule")
+        page.locator("#write-schule").fill("Meine gesicherte Antwort.")
+        backup = page.evaluate("localStorage.getItem('dpl-digital-v03')")
+        assert backup and "Meine gesicherte Antwort." in backup
+        page.locator("#write-schule").fill("Eine neue Antwort, die überschrieben werden darf.")
+        page.once("dialog", lambda dialog: dialog.accept())
+        page.locator("#progress-import-file").set_input_files({
+            "name": "deutsch-learning-progress.json",
+            "mimeType": "application/json",
+            "buffer": backup.encode("utf-8")
+        })
+        expect(page.locator("#write-schule")).to_have_value("Meine gesicherte Antwort.")
         assert not errors, errors
         print(f"PASS {width} × {height}, {'mobile emulation' if mobile else 'desktop browser viewport'}", flush=True)
     except Exception:
