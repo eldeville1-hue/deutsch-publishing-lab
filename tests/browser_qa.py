@@ -31,7 +31,19 @@ def test_viewport(browser, width, height, mobile):
                                   is_mobile=mobile, has_touch=mobile, reduced_motion="reduce")
     page = context.new_page()
     page.set_default_timeout(7000)
+    page.add_init_script("""() => {
+      window.qaClicks = [];
+      document.addEventListener('click', event => {
+        const target = event.target.closest('button,input,select');
+        window.qaClicks.push(target?.outerHTML.slice(0, 180) || event.target.tagName);
+      }, true);
+    }""")
     errors = []
+    def activate(control):
+        if mobile:
+            control.tap()
+        else:
+            control.click()
     page.on("pageerror", lambda error: errors.append(str(error)))
     try:
         assert page.goto(URL).ok
@@ -53,27 +65,27 @@ def test_viewport(browser, width, height, mobile):
             grade = lesson.locator('[onclick^="grade("]')
             for index, value in enumerate(reading):
                 choose(index, (value + 1) % 3 if index == 0 else value)
-            grade.click()
+            activate(grade)
             assert not errors, errors
             expect(page.locator(f"#score-{chapter}")).to_contain_text("2 von 3")
             choose(0, reading[0])
             expect(page.locator(f"#score-{chapter}")).to_contain_text("erneut prüfen")
-            grade.click()
+            activate(grade)
             assert not errors, errors
             expect(page.locator(f"#score-{chapter}")).to_contain_text("3 von 3")
 
             check_language = lesson.locator("[data-check-practice]")
             for index, value in enumerate(language):
                 page.select_option(f"#cloze-{chapter}-{index}", str((value + 1) % 3 if index == 0 else value))
-            check_language.click()
+            activate(check_language)
             expect(page.locator(f"#cloze-score-{chapter}")).to_contain_text("2 / 3")
             page.select_option(f"#cloze-{chapter}-0", str(language[0]))
             expect(page.locator(f"#cloze-score-{chapter}")).to_contain_text("erneut prüfen")
-            check_language.click()
+            activate(check_language)
             expect(page.locator(f"#cloze-score-{chapter}")).to_contain_text("3 / 3")
 
             toggle = lesson.locator(f'[aria-controls="write-{chapter}"]')
-            toggle.click()
+            activate(toggle)
             draft = page.locator(f"#write-{chapter}")
             expect(draft).to_be_focused()
             check_width(page, width)
@@ -132,6 +144,7 @@ def test_viewport(browser, width, height, mobile):
         print(f"PASS {width} × {height}, {'mobile emulation' if mobile else 'desktop browser viewport'}", flush=True)
     except Exception:
         print(f"Failed at {width} × {height}: {page.title()}, errors={errors}", flush=True)
+        print(page.evaluate("window.qaClicks?.slice(-12)"), flush=True)
         raise
     finally:
         context.close()
