@@ -111,6 +111,10 @@ def test_viewport(browser, width, height, mobile):
         page.locator("#interview-write-gespraech").fill("Ich habe die Aufgabe sorgfältig gelöst.")
         page.locator("#interview-followup-gespraech").fill("Beim zweiten Versuch habe ich nachgefragt.")
         page.locator("#reader-back-library").click()
+        page.locator('[data-open-lesson="betrieb"]').click()
+        page.locator("#report-write-betrieb").fill("Am Smartphone bleibt die Bestätigung aus.")
+        page.locator("#report-followup-betrieb").fill("Ich werde den Browser vergleichen.")
+        page.locator("#reader-back-library").click()
         page.locator("#library-start").click()
         if width <= 840:
             page.locator("#next").click()
@@ -160,6 +164,10 @@ def test_viewport(browser, width, height, mobile):
         page.locator('[data-open-lesson="gespraech"]').click()
         expect(page.locator("#interview-write-gespraech")).to_have_value("Ich habe die Aufgabe sorgfältig gelöst.")
         expect(page.locator("#interview-followup-gespraech")).to_have_value("Beim zweiten Versuch habe ich nachgefragt.")
+        page.locator("#reader-back-library").click()
+        page.locator('[data-open-lesson="betrieb"]').click()
+        expect(page.locator("#report-write-betrieb")).to_have_value("Am Smartphone bleibt die Bestätigung aus.")
+        expect(page.locator("#report-followup-betrieb")).to_have_value("Ich werde den Browser vergleichen.")
         page.locator("#reader-back-library").click()
 
         page.locator("#library-continue").click()
