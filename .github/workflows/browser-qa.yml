@@ -1,0 +1,32 @@
+name: Browser QA
+
+on:
+  push:
+    branches: [main]
+    paths: [index.html, tests/browser_qa.py, .github/workflows/browser-qa.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Install Playwright
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install playwright==1.56.0
+          .venv/bin/playwright install --with-deps chromium
+      - name: Test the textbook under its Pages path
+        run: |
+          mkdir -p "${RUNNER_TEMP}/preview"
+          ln -s "$PWD" "${RUNNER_TEMP}/preview/deutsch-publishing-lab"
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory "${RUNNER_TEMP}/preview" &
+          for attempt in {1..10}; do
+            if curl -fsS http://127.0.0.1:8765/deutsch-publishing-lab/ >/dev/null; then break; fi
+            sleep 1
+          done
+          .venv/bin/python tests/browser_qa.py
