@@ -54,10 +54,12 @@ def test_viewport(browser, width, height, mobile):
             for index, value in enumerate(reading):
                 choose(index, (value + 1) % 3 if index == 0 else value)
             grade.click()
+            assert not errors, errors
             expect(page.locator(f"#score-{chapter}")).to_contain_text("2 von 3")
             choose(0, reading[0])
             expect(page.locator(f"#score-{chapter}")).to_contain_text("erneut prüfen")
             grade.click()
+            assert not errors, errors
             expect(page.locator(f"#score-{chapter}")).to_contain_text("3 von 3")
 
             check_language = lesson.locator("[data-check-practice]")
@@ -128,6 +130,9 @@ def test_viewport(browser, width, height, mobile):
         expect(page.locator(".final-dialog")).to_be_hidden()
         assert not errors, errors
         print(f"PASS {width} × {height}, {'mobile emulation' if mobile else 'desktop browser viewport'}", flush=True)
+    except Exception:
+        print(f"Failed at {width} × {height}: {page.title()}, errors={errors}", flush=True)
+        raise
     finally:
         context.close()
 

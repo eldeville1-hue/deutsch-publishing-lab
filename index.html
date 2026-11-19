@@ -175,6 +175,7 @@ body.reading-focus .card{box-shadow:none}
 .library-shell,.study-dialog,.final-dialog,.lesson{overflow-wrap:anywhere}
 :focus-visible{outline:3px solid var(--green);outline-offset:3px}
 .library-shell [tabindex="-1"]:focus,.lesson h1[tabindex="-1"]:focus{outline:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body.night{color-scheme:dark}
 .night .library-shell{
  --library-bg:#18231d;
@@ -274,7 +275,7 @@ try{
 function persist(){if(!canStore)return;try{localStorage.setItem(STORAGE,JSON.stringify(state));document.getElementById('saveStatus').textContent='Lokal gespeichert'}catch(e){canStore=false;document.getElementById('saveStatus').textContent='Speichern nicht verfügbar'}}
 function showLesson(id,scroll=true){current=Math.max(0,lessons.indexOf(id));lessons.forEach((name,i)=>{document.getElementById('lesson-'+name).classList.toggle('hidden',i!==current);document.querySelector('[data-lesson="'+name+'"]').classList.toggle('active',i===current)});document.getElementById('pager').textContent=(current+1)+' / '+lessons.length;document.getElementById('prev').disabled=current===0;document.getElementById('next').disabled=current===lessons.length-1;state.current=id;persist();
 const heading=document.querySelector('#lesson-'+id+' h1');
-if(scroll){heading.tabIndex=-1;heading.focus({preventScroll:true});window.scrollTo(0,0)}
+if(scroll){heading.tabIndex=-1;heading.focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'})}
 document.querySelector('.skip-to-content').href='#lesson-'+id;
 document.getElementById('lesson-'+id).tabIndex=-1;
 document.querySelectorAll('[data-lesson]').forEach(button=>{if(button.dataset.lesson===id)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current')});document.title='Deutsch für den Ausbildungsstart — '+document.querySelector('#lesson-'+id+' h1').textContent}
@@ -291,7 +292,7 @@ const clozeKey={"anzeigen": [{"a": 0, "why": "Die Anzeige nennt persönliche Bet
 function gradeCloze(id){let score=0,answered=0;clozeKey[id].forEach((item,i)=>{const el=document.getElementById('cloze-'+id+'-'+i),fb=document.getElementById('cloze-feedback-'+id+'-'+i);fb.classList.remove('good','try-again');if(el.value===''){fb.textContent='Wähle zuerst eine Antwort.';return}answered++;if(Number(el.value)===item.a){score++;fb.textContent='✓ Richtig. '+item.why;fb.classList.add('good')}else{fb.textContent='Noch nicht richtig. '+item.why;fb.classList.add('try-again')}});document.getElementById('cloze-score-'+id).textContent=answered===clozeKey[id].length?score+' / '+clozeKey[id].length+' richtig.':'Bitte bearbeite alle drei Aufgaben.';if(answered===clozeKey[id].length){state[id+'-cloze-score']=score;persist()}updateReview();}
 function updateReview(){const el=document.getElementById('review-summary');if(!el)return;el.innerHTML=lessons.map((id,i)=>{const q=Number.isInteger(state[id+'-score'])?state[id+'-score']+'/3':'—';const c=Number.isInteger(state[id+'-cloze-score'])?state[id+'-cloze-score']+'/3':'—';return '<div class="review-item"><span>Kapitel '+(i+1)+'</span><span>Lesen '+q+' · Sprache '+c+'</span></div>'}).join('');}
 document.querySelectorAll('[data-check-practice]').forEach(b=>b.addEventListener('click',()=>gradeCloze(b.dataset.checkPractice)));
-document.getElementById('review-current').addEventListener('click',()=>{const id=lessons[current];document.querySelector('#lesson-'+id+' .practice-section').scrollIntoView({behavior:'smooth',block:'start'})});
+document.getElementById('review-current').addEventListener('click',()=>{const id=lessons[current];document.querySelector('#lesson-'+id+' .practice-section').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'})});
 const originalGrade=grade;grade=function(id){originalGrade(id);updateReview();};
 updateReview();
 
@@ -465,9 +466,9 @@ document.getElementById('final-grade').addEventListener('click',()=>{let score=0
  const paths=[...document.querySelectorAll('.lesson-path')];
  document.addEventListener('click',(event)=>{
    const btn=event.target.closest('[data-scroll-step]');
-   if(btn){const target=document.getElementById(btn.dataset.scrollStep);if(target){target.scrollIntoView({behavior:'smooth',block:'start'});btn.closest('.lesson-step-nav').querySelectorAll('button').forEach(b=>b.classList.toggle('is-active',b===btn));}return;}
+   if(btn){const target=document.getElementById(btn.dataset.scrollStep);if(target){target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});btn.closest('.lesson-step-nav').querySelectorAll('button').forEach(b=>b.classList.toggle('is-active',b===btn));}return;}
    const back=event.target.closest('[data-back-to-path]');
-   if(back){const lesson=document.getElementById('lesson-'+back.dataset.backToPath);lesson?.querySelector('.lesson-path')?.scrollIntoView({behavior:'smooth',block:'start'});}
+   if(back){const lesson=document.getElementById('lesson-'+back.dataset.backToPath);lesson?.querySelector('.lesson-path')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
  });
  if('IntersectionObserver' in window){
    const observer=new IntersectionObserver(entries=>{
