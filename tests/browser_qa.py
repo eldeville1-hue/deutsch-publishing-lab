@@ -101,8 +101,14 @@ def test_viewport(browser, width, height, mobile):
             expect(library.locator("h1")).to_be_focused()
 
         page.locator("#library-start").click()
-        page.locator("#next").click()
-        expect(page.locator("#quick-chapter")).to_have_value("anschreiben")
+        if width <= 840:
+            page.locator("#next").click()
+            expect(page.locator("#quick-chapter")).to_have_value("anschreiben")
+            page.locator("#prev").click()
+            expect(page.locator("#quick-chapter")).to_have_value("anzeigen")
+        else:
+            page.locator('.chapter-link[data-lesson="anschreiben"]').click()
+            expect(page.locator("#quick-chapter")).to_have_value("anschreiben")
         page.select_option("#quick-chapter", "schule")
         page.locator("#reader-back-library").click()
         page.locator("#library-continue").click()
