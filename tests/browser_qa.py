@@ -31,13 +31,14 @@ def test_viewport(browser, width, height, mobile):
                                   is_mobile=mobile, has_touch=mobile, reduced_motion="reduce")
     page = context.new_page()
     page.set_default_timeout(7000)
-    page.add_init_script("""() => {
+    page.add_init_script("""(() => {
       window.qaClicks = [];
       document.addEventListener('click', event => {
         const target = event.target.closest('button,input,select');
-        window.qaClicks.push(target?.outerHTML.slice(0, 180) || event.target.tagName);
+        window.qaClicks.push([location.pathname, target?.outerHTML.slice(0, 180) || event.target.tagName,
+          event.clientX, event.clientY, window.scrollY]);
       }, true);
-    }""")
+    })();""")
     errors = []
     def activate(control):
         if mobile:
@@ -65,6 +66,7 @@ def test_viewport(browser, width, height, mobile):
             grade = lesson.locator('[onclick^="grade("]')
             for index, value in enumerate(reading):
                 choose(index, (value + 1) % 3 if index == 0 else value)
+            grade.scroll_into_view_if_needed()
             activate(grade)
             assert not errors, errors
             expect(page.locator(f"#score-{chapter}")).to_contain_text("2 von 3")
