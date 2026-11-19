@@ -839,8 +839,8 @@ input.addEventListener("change",async()=>{
   if(!parsed||typeof parsed!=="object"||Array.isArray(parsed)||Object.keys(parsed).length===0)throw Error("Keine gültige Fortschrittsdatei.");
   const keys=Object.keys(parsed);
   if(keys.some(k=>k==="__proto__"||k==="constructor"||k==="prototype"))throw Error("Die Datei enthält ungültige Schlüssel.");
-  const allowed=/^(current|night|reader-scale|radio-|review-|cloze-|anzeigen-|anschreiben-|gespraech-|betrieb-|schule-|transfer-|career-|final-|focus-|writing-|reader-|library-|studio-|study-)/;
-  if(!keys.every(k=>allowed.test(k)))throw Error("Die Datei scheint nicht aus diesem Arbeitsbuch zu stammen.");
+  if(!keys.every(k=>/^[a-zA-Z0-9_-]{1,100}$/.test(k)))throw Error("Die Datei enthält ungültige Schlüssel.");
+  if(!keys.some(k=>k==="current"||k==="night"||k.startsWith("radio-")||k.startsWith("review-")||k.startsWith("anzeigen-")||k.startsWith("schule-")||k.startsWith("career-")||k.startsWith("cloze-")))throw Error("Die Datei scheint nicht aus diesem Arbeitsbuch zu stammen.");
   if(parsed.current!==undefined&&!["anzeigen","anschreiben","gespraech","betrieb","schule"].includes(parsed.current))throw Error("Die Datei enthält ein unbekanntes Kapitel.");
   if(keys.some(k=>typeof parsed[k]==="object"&&parsed[k]!==null))throw Error("Die Datei enthält unerwartete Daten.");
   if(!window.confirm("Gespeicherte Antworten und Texte auf diesem Gerät durch diese Sicherung ersetzen? Diese Aktion kann nicht rückgängig gemacht werden."))return;
