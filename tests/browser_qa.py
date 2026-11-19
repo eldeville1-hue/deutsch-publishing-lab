@@ -115,6 +115,10 @@ def test_viewport(browser, width, height, mobile):
         page.locator("#report-write-betrieb").fill("Am Smartphone bleibt die Bestätigung aus.")
         page.locator("#report-followup-betrieb").fill("Ich werde den Browser vergleichen.")
         page.locator("#reader-back-library").click()
+        page.locator('[data-open-lesson="schule"]').click()
+        page.locator("#comparison-write-schule").fill("Ich vergleiche die Alternativen anhand der Kriterien.")
+        page.locator("#comparison-question-schule").fill("Welche Kosten sollen wir berücksichtigen?")
+        page.locator("#reader-back-library").click()
         page.locator("#library-start").click()
         if width <= 840:
             page.locator("#next").click()
@@ -168,6 +172,10 @@ def test_viewport(browser, width, height, mobile):
         page.locator('[data-open-lesson="betrieb"]').click()
         expect(page.locator("#report-write-betrieb")).to_have_value("Am Smartphone bleibt die Bestätigung aus.")
         expect(page.locator("#report-followup-betrieb")).to_have_value("Ich werde den Browser vergleichen.")
+        page.locator("#reader-back-library").click()
+        page.locator('[data-open-lesson="schule"]').click()
+        expect(page.locator("#comparison-write-schule")).to_have_value("Ich vergleiche die Alternativen anhand der Kriterien.")
+        expect(page.locator("#comparison-question-schule")).to_have_value("Welche Kosten sollen wir berücksichtigen?")
         page.locator("#reader-back-library").click()
 
         page.locator("#library-continue").click()
