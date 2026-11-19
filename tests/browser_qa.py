@@ -162,6 +162,7 @@ def test_viewport(browser, width, height, mobile):
         expect(page.locator("#interview-followup-gespraech")).to_have_value("Beim zweiten Versuch habe ich nachgefragt.")
         page.locator("#reader-back-library").click()
 
+        page.locator("#library-continue").click()
         page.locator("#final-open").click()
         expect(page.locator(".final-dialog")).to_be_visible()
         check_width(page, width)
