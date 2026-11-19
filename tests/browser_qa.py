@@ -119,6 +119,11 @@ def test_viewport(browser, width, height, mobile):
         page.locator("#comparison-write-schule").fill("Ich vergleiche die Alternativen anhand der Kriterien.")
         page.locator("#comparison-question-schule").fill("Welche Kosten sollen wir berücksichtigen?")
         page.locator("#reader-back-library").click()
+        # Every cross-profession writing prompt must be editable and restorable.
+        for chapter in CHAPTERS:
+            page.locator(f'[data-open-lesson="{chapter}"]').click()
+            page.locator(f"#career-write-{chapter}").fill(f"Meine berufliche Situation: {chapter}.")
+            page.locator("#reader-back-library").click()
         page.locator("#library-start").click()
         if width <= 840:
             page.locator("#next").click()
@@ -177,6 +182,11 @@ def test_viewport(browser, width, height, mobile):
         expect(page.locator("#comparison-write-schule")).to_have_value("Ich vergleiche die Alternativen anhand der Kriterien.")
         expect(page.locator("#comparison-question-schule")).to_have_value("Welche Kosten sollen wir berücksichtigen?")
         page.locator("#reader-back-library").click()
+
+        for chapter in CHAPTERS:
+            page.locator(f'[data-open-lesson="{chapter}"]').click()
+            expect(page.locator(f"#career-write-{chapter}")).to_have_value(f"Meine berufliche Situation: {chapter}.")
+            page.locator("#reader-back-library").click()
 
         page.locator("#library-continue").click()
         page.locator("#final-open").click()
