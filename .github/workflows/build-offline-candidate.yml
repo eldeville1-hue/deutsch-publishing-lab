@@ -1,6 +1,9 @@
 name: Build offline edition candidate
 
 on:
+  push:
+    branches: [main]
+    paths: [index.html, distribution/**, .github/workflows/build-offline-candidate.yml]
   workflow_dispatch:
 
 permissions:
