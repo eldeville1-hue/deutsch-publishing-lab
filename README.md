@@ -1,29 +1,64 @@
+<p align="center">
+  <img src="assets/workbook-cover.svg" alt="Deutsch für den Ausbildungsstart — interaktives Arbeitsbuch B1" width="100%">
+</p>
+
 # Deutsch für den Ausbildungsstart
 
-Interaktives Arbeitsbuch auf Niveau B1 · Deutsch Publishing Lab · Web-Beta
+**Ein interaktives B1-Arbeitsbuch rund um Bewerbung, Ausbildungsbetrieb und Berufsschule.**
 
-Die Lernbibliothek führt durch fünf Kapitel vom Lesen einer Stellenanzeige
-bis zum Alltag in der Berufsschule. Jedes Kapitel enthält Leseaufgaben,
-Sprachtraining, Schreibaufgaben und einen Lernpfad. Das Lernstudio zeigt
-geprüfte Antworten und Aufgaben zur Wiederholung an.
+*Deutsch Publishing Lab · Web-Beta · Kostenloser Lernprototyp*
 
-## Start und Veröffentlichung
+Dieses Projekt erprobt, wie sich berufsbezogene Deutschübungen in einer übersichtlichen, browserbasierten Lernumgebung präsentieren lassen. Fünf Kapitel begleiten Lernende von Stellenanzeigen bis zur Berufsschule. Inhalte und Prüfungsansprüche werden bewusst vorsichtig formuliert: Das Produkt ersetzt weder offiziellen Sprachunterricht noch eine anerkannte B1-Prüfung.
 
-`index.html` enthält das gesamte Arbeitsbuch. Für einen lokalen Test
-`python3 -m http.server 8000` im Repository ausführen und
-`http://localhost:8000/` öffnen. GitHub Pages veröffentlicht die statischen
-Dateien aus `main` und `/(root)`. Ein zusätzlicher Build ist nicht erforderlich.
+## Das Lernprodukt im Überblick
 
-## Lernfortschritt und fachlicher Status
+| Kapitel | Thema | Schwerpunkt |
+| :--- | :--- | :--- |
+| 01 | Stellenanzeigen | Anforderungen und Aufgaben verstehen |
+| 02 | Anschreiben | Formulierungen und Motivation |
+| 03 | Vorstellungsgespräch | Berufliche Erfahrungen und Fragen |
+| 04 | Ausbildungsbetrieb | Arbeitsanweisungen und Rückfragen |
+| 05 | Berufsschule | Lernorganisation und Kommunikation |
 
-Fortschritt und Entwürfe werden im Browser gespeichert, sofern der Browser
-lokalen Speicher erlaubt. Daten sind an den Browser und die Adresse der
-Anwendung gebunden. Der Fortschrittsexport umfasst den Kapitelstand.
-Freie Texte werden anhand von Checklisten und Modelltexten selbst überprüft.
+**Umsetzung:** responsives HTML/CSS/JavaScript, ohne Framework oder Build-Schritt. Die interaktive Oberfläche verwendet browserseitige Speicherung für den Lernfortschritt und Entwürfe, soweit der Browser dies zulässt.
 
-Das Arbeitsbuch ist eine Web-Beta. Eine unabhängige DaF/DaZ-Prüfung der
-Lernziele, Aufgaben und Bewertungsmaßstäbe steht aus.
+## Vorschau und lokaler Start
 
-## Produktentwicklung und erster Nachfrage-Test
+- [Quellcode der Anwendung](index.html)
+- [Browser-Qualitätstests](tests/browser_qa.py)
+- [Editorial Quality Gate](docs/EDITORIAL_QUALITY_GATE.md)
+- [Market Validation v1](docs/MARKET_VALIDATION_V1.md)
 
-Die bestehende Lernlogik der fünf Kapitel bleibt erhalten. Langfristig soll der Kern für verschiedene Ausbildungsberufe nutzbar werden; aktuell sind viele Beispiele noch IT-orientiert. Für einen vorsichtigen, kostenlosen Test der Nachfrage und für die Positionierung siehe [Market Validation v1](docs/MARKET_VALIDATION_V1.md). Es werden auf dieser Website derzeit keine Zahlungen entgegengenommen.
+Zum lokalen Test:
+
+```bash
+git clone https://github.com/eldeville1-hue/deutsch-publishing-lab.git
+cd deutsch-publishing-lab
+python3 -m http.server 8000
+```
+
+Danach `http://localhost:8000/` öffnen. Die Seite kann statisch über GitHub Pages aus `main` veröffentlicht werden.
+
+## Qualität und transparente Grenzen
+
+- Automatisierte Browser-Tests sind eingerichtet; ein erfolgreicher Lauf ersetzt keine Prüfung auf einem physischen iPhone.
+- Geschlossene Fragen werden automatisch ausgewertet; bei freien Texten helfen Checklisten und Modelltexte zur Selbstkontrolle.
+- Lernfortschritt und Entwürfe können im Browser gespeichert werden. Der Fortschrittsexport umfasst den Kapitelstand, nicht sämtliche frei geschriebenen Texte.
+- Eine **unabhängige DaF/DaZ-Fachprüfung** von Lernzielen, Aufgaben und Bewertungskriterien steht noch aus.
+- Der aktuelle Prototyp erhebt **keine Zahlungen**.
+
+Die offenen Freigabekriterien und redaktionellen Verbesserungsbedarfe sind im [Quality Gate](docs/EDITORIAL_QUALITY_GATE.md) dokumentiert.
+
+## Portfolio: Was dieses Projekt demonstriert
+
+**Frontend engineering** — Gestaltung und Umsetzung einer responsiven Lernoberfläche, interaktiver Aufgaben und lokaler Zustandsverwaltung.
+
+**Product thinking** — Lernpfad und inhaltliche Struktur für eine konkrete Zielgruppe im Kontext Ausbildung.
+
+**Quality assurance** — Automatisierte Browser-Regressionen, nachvollziehbare Freigabekriterien und dokumentierte Grenzen der Validierung.
+
+**Status:** Web-Beta. Die fünf Kapitel sind eine erste, noch nicht unabhängig didaktisch zertifizierte Fassung. Langfristige Erweiterungen werden erst nach inhaltlicher Validierung priorisiert.
+
+---
+
+<sub>Ein unabhängiges Projekt von [eldeville1-hue](https://github.com/eldeville1-hue). Die visuelle Präsentation ist Teil einer konsistenten Portfolio-Gestaltung; der Quellcode der Lernanwendung wurde für diese Dokumentationsänderung nicht angepasst.</sub>
