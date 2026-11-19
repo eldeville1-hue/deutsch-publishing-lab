@@ -100,6 +100,12 @@ def test_viewport(browser, width, height, mobile):
             page.locator("#reader-back-library").click()
             expect(library.locator("h1")).to_be_focused()
 
+        # Editorial writing workshops in chapters 1 and 2 must preserve drafts.
+        page.locator('[data-open-lesson="anzeigen"]').click()
+        page.locator("#evidence-write-anzeigen").fill("In der Anzeige finde ich konkrete Informationen.")
+        page.locator('[data-open-lesson="anschreiben"]').click()
+        page.locator("#motivation-write-anschreiben").fill("Mein kleines Projekt zeigt, wie ich lerne.")
+        page.locator("#reader-back-library").click()
         page.locator("#library-start").click()
         if width <= 840:
             page.locator("#next").click()
@@ -138,6 +144,14 @@ def test_viewport(browser, width, height, mobile):
         expect(page.locator("#cloze-schule-0")).to_have_value("1")
         expect(page.locator("body")).to_have_class(re.compile("night"))
         assert page.locator("body").evaluate("el => el.style.getPropertyValue('--reader-scale')") == "1.1"
+
+        page.locator("#reader-back-library").click()
+        page.locator('[data-open-lesson="anzeigen"]').click()
+        expect(page.locator("#evidence-write-anzeigen")).to_have_value("In der Anzeige finde ich konkrete Informationen.")
+        page.locator("#reader-back-library").click()
+        page.locator('[data-open-lesson="anschreiben"]').click()
+        expect(page.locator("#motivation-write-anschreiben")).to_have_value("Mein kleines Projekt zeigt, wie ich lerne.")
+        page.locator("#reader-back-library").click()
 
         page.locator("#final-open").click()
         expect(page.locator(".final-dialog")).to_be_visible()
