@@ -103,6 +103,7 @@ def test_viewport(browser, width, height, mobile):
         # Editorial writing workshops in chapters 1 and 2 must preserve drafts.
         page.locator('[data-open-lesson="anzeigen"]').click()
         page.locator("#evidence-write-anzeigen").fill("In der Anzeige finde ich konkrete Informationen.")
+        page.locator("#reader-back-library").click()
         page.locator('[data-open-lesson="anschreiben"]').click()
         page.locator("#motivation-write-anschreiben").fill("Mein kleines Projekt zeigt, wie ich lerne.")
         page.locator("#reader-back-library").click()
