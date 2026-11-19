@@ -107,6 +107,10 @@ def test_viewport(browser, width, height, mobile):
         page.locator('[data-open-lesson="anschreiben"]').click()
         page.locator("#motivation-write-anschreiben").fill("Mein kleines Projekt zeigt, wie ich lerne.")
         page.locator("#reader-back-library").click()
+        page.locator('[data-open-lesson="gespraech"]').click()
+        page.locator("#interview-write-gespraech").fill("Ich habe die Aufgabe sorgfältig gelöst.")
+        page.locator("#interview-followup-gespraech").fill("Beim zweiten Versuch habe ich nachgefragt.")
+        page.locator("#reader-back-library").click()
         page.locator("#library-start").click()
         if width <= 840:
             page.locator("#next").click()
@@ -152,6 +156,10 @@ def test_viewport(browser, width, height, mobile):
         page.locator("#reader-back-library").click()
         page.locator('[data-open-lesson="anschreiben"]').click()
         expect(page.locator("#motivation-write-anschreiben")).to_have_value("Mein kleines Projekt zeigt, wie ich lerne.")
+        page.locator("#reader-back-library").click()
+        page.locator('[data-open-lesson="gespraech"]').click()
+        expect(page.locator("#interview-write-gespraech")).to_have_value("Ich habe die Aufgabe sorgfältig gelöst.")
+        expect(page.locator("#interview-followup-gespraech")).to_have_value("Beim zweiten Versuch habe ich nachgefragt.")
         page.locator("#reader-back-library").click()
 
         page.locator("#final-open").click()
