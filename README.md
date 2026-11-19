@@ -23,3 +23,7 @@ Freie Texte werden anhand von Checklisten und Modelltexten selbst überprüft.
 
 Das Arbeitsbuch ist eine Web-Beta. Eine unabhängige DaF/DaZ-Prüfung der
 Lernziele, Aufgaben und Bewertungsmaßstäbe steht aus.
+
+## Produktentwicklung und erster Nachfrage-Test
+
+Die bestehende Lernlogik der fünf Kapitel bleibt erhalten. Langfristig soll der Kern für verschiedene Ausbildungsberufe nutzbar werden; aktuell sind viele Beispiele noch IT-orientiert. Für einen vorsichtigen, kostenlosen Test der Nachfrage und für die Positionierung siehe [Market Validation v1](docs/MARKET_VALIDATION_V1.md). Es werden auf dieser Website derzeit keine Zahlungen entgegengenommen.
