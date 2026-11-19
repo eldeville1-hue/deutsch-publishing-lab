@@ -1,0 +1,39 @@
+name: Build offline edition candidate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Validate source and create offline candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s index.html
+          test -s distribution/README_BUYER_DE.md
+          grep -q 'id="lesson-anzeigen"' index.html
+          grep -q 'id="lesson-anschreiben"' index.html
+          grep -q 'id="lesson-gespraech"' index.html
+          grep -q 'id="lesson-betrieb"' index.html
+          grep -q 'id="lesson-schule"' index.html
+          mkdir -p package/deutsch-fuer-den-ausbildungsstart-b1
+          cp index.html package/deutsch-fuer-den-ausbildungsstart-b1/index.html
+          cp distribution/README_BUYER_DE.md package/deutsch-fuer-den-ausbildungsstart-b1/ANLEITUNG_DE.md
+          printf 'Source commit: %s\nEdition: Web Beta candidate, not commercial release\n' "$GITHUB_SHA" > package/deutsch-fuer-den-ausbildungsstart-b1/BUILD_INFO.txt
+          cd package
+          zip -r -9 Deutsch_Ausbildungsstart_B1_Offline_Beta.zip deutsch-fuer-den-ausbildungsstart-b1/
+          unzip -t Deutsch_Ausbildungsstart_B1_Offline_Beta.zip
+          sha256sum Deutsch_Ausbildungsstart_B1_Offline_Beta.zip
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: Deutsch_Ausbildungsstart_B1_Offline_Beta
+          path: package/Deutsch_Ausbildungsstart_B1_Offline_Beta.zip
+          retention-days: 14
+          if-no-files-found: error
